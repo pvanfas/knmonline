@@ -1,0 +1,131 @@
+{% extends 'app/base.html' %}
+{% load static i18n crispy_forms_tags %}
+{% block title %}{{title}}: {{app_settings.site_title}}{% endblock %}
+
+{% block content %}
+
+<div class="side-app main-container detail_page">
+
+  <!--Page header-->
+  <div class="page-header d-flex">
+    <div class="page-rightheader ms-md-auto">
+      <div class="btn-list">
+
+        <a href="javascript:void(0);" onclick="window.print();" class="btn btn-sm btn-white" title="Print"> <i
+            class="feather feather-printer"></i> </a>
+
+        {% if object.get_update_url %}
+        <a href="{{object.get_update_url}}" class="btn btn-sm btn-white" data-bs-placement="top"
+          data-bs-toggle="tooltip" title="Edit"> <i class="text-primary feather feather-edit-3"></i> </a>
+        {% endif %}
+
+        {% if object.get_delete_url %}
+        <a href="{{object.get_delete_url}}" class="btn btn-sm btn-white" data-bs-placement="top"
+          data-bs-toggle="tooltip" title="Delete"> <i class="text-danger feather feather-trash-2"></i> </a>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+  <!--End Page header-->
+
+  <!-- Row-->
+  <div class="row">
+
+    <div class="col-md-6">
+      {% if object %}
+      <div class="card content_card">
+        <div class="card-header">
+          <div class="card-title d-flex align-items-center w-100">
+            <h5 class="mb-0">{{object}}</h5>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover info_table mb-0" style="width:100%;">
+              <tbody>
+                {% for name, value in object.get_fields|slice:"5:" %}
+                {% if value %}
+                <tr>
+                  <td> {{name}} </td>
+                  <td> {{ value }} </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+      {% else %}
+      <div class="card content_card">
+        <div class="card-body">
+          <p class="text-center">There is nothing here</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <div class="card content-card">
+        <div class="card-header">
+          <div class="card-title d-flex align-items-center w-100">
+            <h5 class="mb-0">Payments</h5>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover info_table mb-0" style="width:100%;">
+              <tbody>
+                {% for payment in object.get_payments %}
+                <tr>
+                  <td> {{payment.date}} </td>
+                  <td> {{payment.mode}} </td>
+                  <td> {{payment.amount}} </td>
+                  <td><a href="{{payment.get_print_url}}" target="_blank"><i class="feather feather-download"></i></a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="4">No payments found</td>
+                </tr>
+                {% endfor %}
+              <tfoot>
+
+
+                <tr>
+                  <td colspan="2"><strong>Total</strong></td>
+                  <td>{{object.total_amount}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><strong>Discount</strong></td>
+                  <td>{{object.discount}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><strong>Payable Amount</strong></td>
+                  <td>{{object.payable_amount}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><strong>Paid Amount</strong></td>
+                  <td>{{object.paid_amount}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><strong>Balance Amount</strong></td>
+                  <td>{{object.balance_amount}}</td>
+                </tr>
+              </tfoot>
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <!-- End Row-->
+
+  </div>
+
+  {% endblock content %}

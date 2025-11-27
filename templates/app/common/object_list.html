@@ -1,0 +1,165 @@
+{% extends 'app/base.html' %}
+{% load static i18n crispy_forms_tags django_tables2 %}
+{% block title %}{{title|title}} : {{app_settings.site_title}}{% endblock %}
+
+{% block content %}
+
+<div class="side-app main-container">
+
+  <!--Page header-->
+  <div class="page-header d-flex">
+    <div class="page-leftheader">
+      <div class="page-title">{{title|title}}</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+      <div class="btn-list">
+
+        {% if can_add and create_url %}
+        <a href="{{create_url}}" class="btn btn-sm btn-white" data-bs-placement="top" data-bs-toggle="tooltip"
+          title="New"> <i class="feather feather-plus"></i> </a>
+        {% endif %}
+
+        <a class="btn btn-sm btn-white" data-bs-toggle="offcanvas" href="#offcanvasFilter" role="button"
+          aria-controls="offcanvasFilter" title="Filter Data"> <i class="feather feather-filter"></i> </a>
+
+        {% if table.paginated_rows %}
+        <a href="{% export_url 'xlsx' %}" class="btn btn-sm btn-white" data-bs-placement="top" data-bs-toggle="tooltip"
+          title="Export"> <i class="feather feather-download-cloud"></i> </a>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+  <!--End Page header-->
+  <div class="row row-sm">
+    <div class="col-lg-12">
+
+      <div class="card">
+        {% if table.paginated_rows %}
+        <form method="post" id="bulk-action-form" novalidate>
+          {% csrf_token %}
+          {% if metadata.actions %}
+          <div class="card-header d-flex flex-wrap align-items-center gap-2 py-3 justify-content-end">
+            <div class="d-flex align-items-center gap-2">
+              <select id="id_action_select" name="action" class="form-select form-select-sm" required>
+                <option value="">{% translate "Select action" %}</option>
+                {% for action in metadata.actions %}
+                <option value="{{ action.value }}">{{ action.label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="min-width: 50px;">
+              {% translate "Go" %}
+            </button>
+            <p class="mb-0 text-danger small d-none" id="bulk-action-feedback">
+              {% translate "Select at least one record to run the action." %}
+            </p>
+          </div>
+          {% endif %}
+          <input type="hidden" name="selected_objects" id="id_selected_objects" value="">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              {% render_table table %}
+            </div>
+          </div>
+        </form>
+        {% else %}
+        <div class="card-body">
+          {{title|title}} {% translate "list is empty." %}
+          {% if can_add %}<a href="{{create_url}}">{% translate "Add New One" %}</a>{% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</div>
+{% if table.paginated_rows %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("bulk-action-form");
+    if (!form) {
+      return;
+    }
+    const actionSelect = form.querySelector("#id_action_select");
+    const feedback = document.getElementById("bulk-action-feedback");
+    const selectedObjectsInput = document.getElementById("id_selected_objects");
+
+    function getSelectedValues() {
+      const checkboxes = form.querySelectorAll('input[type="checkbox"][value]');
+      return Array.from(checkboxes)
+        .filter((checkbox) => !checkbox.disabled && checkbox.checked && checkbox.value)
+        .map((checkbox) => checkbox.value);
+    }
+
+    form.addEventListener("submit", function (event) {
+      if (actionSelect && !actionSelect.value) {
+        event.preventDefault();
+        actionSelect.classList.add("is-invalid");
+        actionSelect.focus();
+        return;
+      }
+      const selected = getSelectedValues();
+      if (!selected.length) {
+        event.preventDefault();
+        if (feedback) {
+          feedback.classList.remove("d-none");
+        }
+        return;
+      }
+      if (selectedObjectsInput) {
+        selectedObjectsInput.value = selected.join(",");
+      }
+      if (feedback) {
+        feedback.classList.add("d-none");
+      }
+    });
+
+    if (actionSelect) {
+      actionSelect.addEventListener("change", function () {
+        actionSelect.classList.remove("is-invalid");
+      });
+    }
+
+    form.addEventListener("change", function (event) {
+      if (event.target.matches('input[type="checkbox"]') && feedback) {
+        feedback.classList.add("d-none");
+      }
+    });
+
+    // Check all functionality - works for any table with check-all checkbox
+    const checkAllCheckbox = form.querySelector('input[type="checkbox"][id^="check-all"]');
+    if (checkAllCheckbox) {
+      // Find all row checkboxes (those with id starting with "checkbox-" but not "check-all")
+      const rowCheckboxes = form.querySelectorAll('input[type="checkbox"][id^="checkbox-"]:not([id^="check-all"])');
+      
+      // Handle check-all checkbox click
+      checkAllCheckbox.addEventListener('change', function() {
+        rowCheckboxes.forEach(function(checkbox) {
+          checkbox.checked = checkAllCheckbox.checked;
+        });
+      });
+
+      // Update check-all checkbox state when individual checkboxes change
+      rowCheckboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+          const allChecked = Array.from(rowCheckboxes).every(function(cb) {
+            return cb.checked;
+          });
+          const someChecked = Array.from(rowCheckboxes).some(function(cb) {
+            return cb.checked;
+          });
+          checkAllCheckbox.checked = allChecked;
+          checkAllCheckbox.indeterminate = someChecked && !allChecked;
+        });
+      });
+    }
+  });
+</script>
+{% endif %}
+
+
+{% include 'app/partials/filter.html' %}
+{% include 'app/partials/help.html' %}
+
+{% endblock content %}

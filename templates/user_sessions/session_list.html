@@ -1,0 +1,69 @@
+{% extends "app/base.html" %}
+{% load user_sessions i18n %}
+
+{% block content %}
+  {% translate "<em>unknown on unknown</em>" as unknown_on_unknown %}
+  {% translate "<em>unknown</em>" as unknown %}
+
+  <div class="side-app main-container edit_page">
+
+    <!--Page header-->
+    <div class="page-header d-flex">
+        <div class="page-leftheader">
+            <div class="page-title">{% translate "Active Sessions" %}</div>
+        </div>
+    </div>
+    <!--End Page header-->
+
+    <div class="row row-sm">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th>{% translate "Location" %}</th>
+                                <th>{% translate "Device" %}</th>
+                                <th>{% translate "Last Activity" %}</th>
+                              </tr>
+                            </thead>
+                            {% for object in object_list %}
+                              <tr {% if object.session_key == session_key %}class="active"{% endif %}>
+                                <td>{{ object.ip|location|default_if_none:unknown|safe }} <small>({{ object.ip }})</small></td>
+                                <td>{{ object.user_agent|device|default_if_none:unknown_on_unknown|safe }}</td>
+                                <td>
+                                  {% if object.session_key == session_key %}
+                                    {% blocktrans with time=object.last_activity|timesince %}{{ time }} ago (this session){% endblocktrans %}
+                                  {% else %}
+                                    {% blocktrans with time=object.last_activity|timesince %}{{ time }} ago{% endblocktrans %}
+                                  {% endif %}
+                                </td>
+                              </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if object_list.count > 1 %}
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="{% url 'user_sessions:session_delete_other' %}">
+                      {% csrf_token %}
+                      <p>{% blocktrans %}You can also end all other sessions but the current.
+                        This will log you out on all other devices.{% endblocktrans %}</p>
+                      <button type="submit" class="btn  btn-outline-danger">{% translate "End All Other Sessions" %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+</div>
+{% endblock %}

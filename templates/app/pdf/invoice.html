@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>
+                <div>
+                    <img class="logo" src="data:;base64,{{ logo }}" alt="logo" />
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="section">
+        <table class="infoTable">
+            <tr>
+                <h2>INVOICE {{order.number}}</h2>
+            </tr>
+        </table>
+    </div>
+
+
+    <div class="section">
+        <table class="invoiceTable">
+            <thead>
+                <tr>
+                    <th>Reference</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.items %}
+                <tr>
+                    <td>{{item.product.reference}}</td>
+                    <td>{{item.product.name}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.total_price.amount}}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

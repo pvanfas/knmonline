@@ -1,0 +1,16 @@
+{% extends "registration/registration_base.html" %}
+{% load static crispy_forms_tags i18n %}
+{% block title %}{{app_settings.site_name}}{% endblock %}
+
+{% block content %}
+
+<form class="card-body pt-3" id="login" method="post">
+    {% csrf_token %}
+    {{form|crispy}}
+
+    <div class="submit">
+        <button type="submit" class="btn btn-primary btn-block">SIGN IN</button>
+    </div>
+</form>
+
+{% endblock content %}

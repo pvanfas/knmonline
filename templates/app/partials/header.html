@@ -1,0 +1,102 @@
+{% load static %}
+<!--app header-->
+<div class="app-header header sticky">
+    <div class="container-fluid main-container">
+        <div class="d-flex align-items-center">
+
+            <a class="header-brand" href="/">
+                <img src="{{app_settings.logo}}" class="header-brand-img desktop-lgo" alt="{{app_settings.site_name}}">
+                <img src="{{app_settings.logo}}" class="header-brand-img dark-logo" alt="{{app_settings.site_name}}">
+                <img src="{{app_settings.logo_mini}}" class="header-brand-img mobile-logo mt-0 ml-1"
+                    alt="{{app_settings.site_name}}">
+                <img src="{{app_settings.logo_mini}}" class="header-brand-img darkmobile-logo"
+                    alt="{{app_settings.site_name}}">
+            </a>
+
+            <div class="app-sidebar__toggle border" data-bs-toggle="sidebar">
+                <a class="open-toggle" href="javascript:void(0);">
+                    <i class="feather feather-menu"></i>
+                </a>
+                <a class="close-toggle" href="javascript:void(0);">
+                    <i class="feather feather-x"></i>
+                </a>
+            </div>
+
+            <div class="mt-0">
+                <a class="nav-link icon border" href="javascript:void(0)" onclick="history.back()">
+                    <i class="feather feather-chevron-left header-icon"></i>
+                </a>
+            </div>
+
+
+            <div class="mt-0">
+                <form class="form-inline" method="get" action="">
+                    <div class="search-element">
+                        <input type="search" id="global_search_bar" class="form-control header-search border"
+                            placeholder="Search ..." aria-label="Search" tabindex="1" name="q"
+                            value="{{request.GET.q}}">
+                        <button class="btn btn-primary-color py-1" type="button" style="min-width: unset;">
+                            <i class="feather feather-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div><!-- SEARCH -->
+
+            <div class="d-flex order-lg-2 my-auto ms-auto">
+                <button class="navbar-toggler border nav-link icon navresponsive-toggler vertical-icon ms-auto"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent-4"
+                    aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fe fe-more-vertical header-icons navbar-toggler-icon"></i>
+                </button>
+                <div class="mb-0 navbar navbar-expand-lg navbar-nav-right responsive-navbar navbar-dark p-0">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+                        <div class="d-flex ms-auto">
+
+                            <div class="dropdown header-fullscreen">
+                                <a class="nav-link icon border full-screen-link">
+                                    <i class="feather feather-maximize fullscreen-button fullscreen header-icons"></i>
+                                    <i
+                                        class="feather feather-minimize fullscreen-button exit-fullscreen header-icons"></i>
+                                </a>
+                            </div>
+
+                            <div class="dropdown header-notify">
+                                <a class="nav-link icon border" data-bs-toggle="sidebar-right"
+                                    data-bs-target="#notificationSidebar">
+                                    <i class="feather feather-bell header-icon"></i>
+                                    <span class="bg-dot"></span>
+                                </a>
+                            </div>
+
+                            <div class="dropdown profile-dropdown">
+                                <a href="javascript:void(0);" class="nav-link p-0 leading-none"
+                                    data-bs-toggle="dropdown">
+                                    <img src="{% static 'app/images/users/15.jpg' %}" alt=" "
+                                        class="avatar avatar-md bradius">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow animated">
+                                    <div class="p-3 text-center border-bottom">
+                                        <a href="#"
+                                            class="d-inline-block font-weight-bold mb-2 pb-0 text-center user">{{request.user|upper}}</a>
+                                        <p class="text-center user-semi-title mb-0">{{request.user.designation}}</p>
+                                    </div>
+
+                                    <a class="dropdown-item d-flex" href="{% url 'auth_password_change' %}">
+                                        <i class="feather feather-edit-2 me-3 fs-16 my-auto"></i>
+                                        <div class="mt-1">Change Password</div>
+                                    </a>
+                                    <a class="dropdown-item d-flex" href="{% url 'auth_logout' %}">
+                                        <i class="feather feather-power me-3 fs-16 my-auto"></i>
+                                        <div class="mt-1">Sign Out</div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--/app header-->

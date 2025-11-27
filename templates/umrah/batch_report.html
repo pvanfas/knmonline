@@ -1,0 +1,139 @@
+{% extends 'app/base.html' %}
+{% load i18n indian_humanize %}
+
+{% block title %}{{ title|title }} : {{ app_settings.site_title }}{% endblock %}
+
+{% block content %}
+
+<div class="side-app main-container">
+
+  <div class="page-header d-flex flex-wrap gap-2 align-items-center">
+    <div class="page-leftheader">
+      <div class="page-title">{{ title|title }}{% if batch %} - {{ batch.name }}{% endif %}</div>
+    </div>
+  </div>
+
+  {% if batch %}
+  <div class="row row-sm mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted text-uppercase fs-12">{% translate "Total Credit" %}</span>
+          </div>
+          <div class="fs-28 fw-semibold mt-2">{{ total_credit|indian_currency }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted text-uppercase fs-12">{% translate "Total Debit" %}</span>
+          </div>
+          <div class="fs-28 fw-semibold mt-2">{{ total_debit|indian_currency }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted text-uppercase fs-12">{% translate "Net Balance" %}</span>
+          </div>
+          <div class="fs-28 fw-semibold mt-2">{{ closing_balance|indian_currency }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row row-sm">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header py-3">
+          <form method="get" class="row g-2 align-items-end w-100">
+            <div class="col-md-4">
+              <label for="id_batch" class="form-label">{% translate "Select Batch" %}</label>
+              <select class="form-select" id="id_batch" name="batch" required>
+                <option value="">{% translate "Select a batch" %}</option>
+                {% for b in batches %}
+                <option value="{{ b.pk }}" {% if batch and batch.pk == b.pk %}selected{% endif %}>{{ b.name }} ({{ b.year }})</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+              <button type="submit" class="btn btn-primary">{% translate "Generate Report" %}</button>
+              <a href="{% url 'umrah:batch_report' %}" class="btn btn-light">{% translate "Reset" %}</a>
+            </div>
+          </form>
+        </div>
+        {% if batch %}
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">{% translate "Date" %}</th>
+                  <th scope="col">{% translate "Receipt/Voucher" %}</th>
+                  <th scope="col">{% translate "Receipt/Voucher No" %}</th>
+                  <th scope="col">{% translate "Batch" %}</th>
+                  <th scope="col">{% translate "Head of Account" %}</th>
+                  <th scope="col" class="text-end">{% translate "Cr Amount" %}</th>
+                  <th scope="col" class="text-end">{% translate "Dr Amount" %}</th>
+                  <th scope="col" class="text-end">{% translate "Balance" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if entries %}
+                {% for entry in entries %}
+                <tr>
+                  <td>{{ entry.date|date:"Y-m-d" }}</td>
+                  <td>{{ entry.label }}</td>
+                  <td>{{ entry.number }}</td>
+                  <td>{{ entry.batch }}</td>
+                  <td>
+                    {{ entry.head }}
+                    {% if entry.notes %}
+                    <div class="text-muted small">{{ entry.notes }}</div>
+                    {% endif %}
+                  </td>
+                  <td class="text-end">{{ entry.credit|indian_currency }}</td>
+                  <td class="text-end">{{ entry.debit|indian_currency }}</td>
+                  <td class="text-end fw-semibold">{{ entry.balance|indian_currency }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td colspan="8" class="text-center text-muted py-4">
+                    {% translate "No transactions found for this batch." %}
+                  </td>
+                </tr>
+                {% endif %}
+              </tbody>
+              <tfoot class="table-light">
+                <tr class="fw-semibold">
+                  <td colspan="5" class="text-end">{% translate "Totals" %}</td>
+                  <td class="text-end">{{ total_credit|indian_currency }}</td>
+                  <td class="text-end">{{ total_debit|indian_currency }}</td>
+                  <td class="text-end">{{ closing_balance|indian_currency }}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        {% else %}
+        <div class="card-body">
+          <div class="text-center text-muted py-5">
+            {% translate "Please select a batch to generate the report." %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock content %}
+

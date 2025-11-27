@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  {% load static compress %}
+  <meta charset="UTF-8">
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+  <title>{% block title %}{{app_settings.site_title}}{% endblock %}</title>
+
+  <meta content="{% block description %}{{app_settings.site_title}}{% endblock %}" name="description">
+  <meta content="{{author}}" name="author">
+  <meta name="keywords" content="" />
+
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-config" content="{% static 'static/app/images/favicons/browserconfig.xml' %}?v=2.0">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="{{app_settings.favicon}}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{app_settings.favicon}}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{app_settings.favicon}}">
+  <link rel="manifest" href="{% static 'app/images/favicon/site.webmanifest' %}">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+    rel="stylesheet">
+
+  {% compress css %}
+  <link rel="stylesheet" href="{% static 'app/plugins/bootstrap/css/bootstrap.css' %}?v=2.0" />
+  <link rel="stylesheet" href="{% static 'app/css/style.min.css' %}?v=2.0" />
+  <link rel="stylesheet" href="{% static 'app/css/plugins.css' %}?v=2.0" />
+  <link rel="stylesheet" href="{% static 'app/css/animated.css' %}?v=2.0" />
+  <link rel="stylesheet" href="{% static 'app/css/plugins/jqueryui.css' %}?v=2.0" />
+  {% endcompress %}
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.8.3/css/lightgallery-bundle.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css">
+
+  {% block css_plugins %}{% endblock %}
+
+  <link rel="stylesheet" href="{% static 'app/css/icons.css' %}?v=2.0" />
+  <link rel="stylesheet" href="{% static 'app/css/custom.css' %}?v=2.0" />
+
+  {% block extra_css %}{% endblock %}
+  <script src="{% static 'app/plugins/jquery/jquery.min.js' %}?v=2.0"></script>
+
+</head>
+
+<body class="app sidebar-mini ltr skin-modes">
+
+  {% include 'app/partials/loader.html' %}
+
+  <div class="page">
+    <div class="page-main">
+
+      {% block header %}
+      {% include 'app/partials/header.html' %}
+      {% endblock %}
+
+      {% block sidebar %}
+
+      {% if request.user.usertype == "Administrator" %}
+        {% include 'app/sidebar/Administrator.html' %}
+      {% elif request.user.usertype == "ChiefElectoralOfficer" %}
+        {% include 'app/sidebar/ChiefElectoralOfficer.html' %}
+      {% elif request.user.usertype == "Staff" %}
+        {% include 'app/sidebar/Staff.html' %}
+      {% endif %}
+
+      {% endblock %}
+
+      <div class="app-content main-content">
+
+        {% if messages %}
+        <script>
+          window.addEventListener('DOMContentLoaded', function () {
+            const toastMessages = [
+              {% for message in messages %}
+              { text: "{{ message|escapejs }}", tags: "{{ message.tags|default:'info' }}" },
+              {% endfor %}
+            ];
+
+            const tagColors = {
+              success: '#22c55e',
+              error: '#ef4444',
+              warning: '#f59e0b',
+              info: '#0ea5e9'
+            };
+
+            if (typeof Toastify !== 'function') {
+              return;
+            }
+
+            toastMessages.forEach(function (msg) {
+              const tagList = msg.tags.split(' ').filter(Boolean);
+              const primaryTag = tagList.length ? tagList[0] : 'info';
+
+              Toastify({
+                text: msg.text,
+                duration: 5000,
+                close: true,
+                gravity: 'bottom',
+                position: 'left',
+                stopOnFocus: true,
+                style: {
+                  background: tagColors[primaryTag] || tagColors.info
+                }
+              }).showToast();
+            });
+          });
+        </script>
+      {% endif %}
+
+        {% block content %}
+
+        {% endblock %}
+
+      </div>
+
+    </div>
+
+    {% include 'app/partials/sidebar-right.html' %}
+
+    <!-- create a sidebar modal -->
+    <div class="modal fade" id="sidebar-modal" tabindex="-1" role="dialog" aria-labelledby="sidebar-modalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-vertical" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="sidebar-modalLabel">title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    {% comment %}
+    <a href="#top" id="back-to-top"><span class="feather feather-chevrons-up"></span></a>
+    {% endcomment %}
+
+    {% compress js %}
+    <script src="{% static 'app/plugins/bootstrap/js/popper.min.js' %}?v=2.0"></script>
+    <script src="{% static 'app/plugins/bootstrap/js/bootstrap.min.js' %}?v=2.0"></script>
+
+    <script src="{% static 'app/plugins/othercharts/jquery.sparkline.min.js' %}?v=2.0"></script>
+    <script src="{% static 'app/plugins/circle-progress/circle-progress.min.js' %}?v=2.0"></script>
+    <script src="{% static 'app/plugins/sidemenu/sidemenu.js' %}?v=2.0"></script>
+    <script src="{% static 'app/plugins/p-scrollbar/p-scrollbar.js' %}?v=2.0"></script>
+    <script src="{% static 'app/plugins/p-scrollbar/p-scroll1.js' %}?v=2.0"></script>
+    <script src="{% static 'app/plugins/sidebar/sidebar.js' %}?v=2.0"></script>
+    <script src="{% static 'app/plugins/select2/select2.full.min.js' %}?v=2.0"></script>
+    <script src="{% static 'app/plugins/bootstrap-datepicker/bootstrap-datepicker.js' %}?v=2.0"></script>
+    <script src="{% static 'app/plugins/date-picker/jquery-ui.js' %}?v=2.0"></script>
+    <script src="{% static 'app/js/masonry.pkgd.min.js' %}?v=2.0" async></script>
+    {% endcompress %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.8.3/lightgallery.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"></script>
+
+    {% block js_plugins %}{% endblock %}
+    <script src="{% static 'app/js/sticky.js' %}?v=2.0"></script>
+    <script src="{% static 'app/js/custom.js' %}?v=2.0"></script>
+    <script src="{% static 'app/js/script.js' %}?v=2.0"></script>
+    {% block javascript %}{% endblock %}
+    <script>
+      var elements = document.getElementsByClassName('lightgallery');
+      for (let item of elements) {
+          lightGallery(item, {share:false})
+      }
+    </script>
+        <script>
+      $('.form-group').contents().filter(function() {
+          return this.nodeType === 3 && $.trim(this.nodeValue) === '[]';
+      }).remove();
+    </script>
+
+</body>
+
+</html>

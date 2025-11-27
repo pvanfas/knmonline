@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Payment Receipt</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+	<style type="text/css">
+		@page {
+			size: a4 portrait;
+			margin: 0;
+			padding: 0;
+
+			@frame footer {
+				-pdf-frame-content: footer_content;
+				bottom: 0in;
+				margin-left: 15pt;
+				margin-right: 15pt;
+				height: 1cm;
+			}
+		}
+
+		body {
+			font-family: 'Open Sans', sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+		* {
+			padding: 0;
+		}
+
+
+	</style>
+</head>
+
+<body>
+	<keepinframe>
+		<div style="height:33.33%;margin-bottom:0;">
+
+			<table style="width:100%;">
+				<tr>
+					<td style="width: 25%;padding:10px;border-right:1px dashed #000;border-bottom:1px dashed #000">
+						<div style="">
+							<div style="padding: 8px;margin: 0 auto;max-width: 200px;text-align: center;">
+								<!-- Header -->
+								<div style="border-bottom: 2px solid #000;padding-bottom: 8px;margin-bottom: 12px;">
+									<h2 style="font-size: 11px;font-weight: 700;margin: 0 0 4px 0;text-transform: uppercase;letter-spacing: 0.5px;">COUNTERFOIL</h2>
+									<p style="font-size: 9px;margin: 0;font-weight: 400;">KERALA NADVATHUL MUJAHIDEEN (KHUS)</p>
+								</div>
+								
+								<!-- Receipt Number -->
+								<div style="margin-bottom: 12px;">
+									<p style="font-size: 9px;margin: 0 0 3px 0;font-weight: 400;">RECEIPT NO</p>
+									<h1 style="font-size: 16px;font-weight: 700;margin: 0;letter-spacing: 1px;">{{object.reciept_number}}</h1>
+								</div>
+								
+								<!-- Details -->
+								<div style="border-top: 1px solid #000;border-bottom: 1px solid #000;padding: 8px 0;margin-bottom: 12px;">
+									<div style="margin-bottom: 8px;text-align: left;">
+										<p style="font-size: 9px;margin: 0 0 2px 0;font-weight: 400;color: #666;">DATE</p>
+										<p style="font-size: 9px;margin: 0;font-weight: 600;">{{object.date}}</p>
+									</div>
+									
+									<div style="margin-bottom: 8px;text-align: left;">
+										<p style="font-size: 9px;margin: 0 0 2px 0;font-weight: 400;color: #666;">BATCH</p>
+										<p style="font-size: 9px;margin: 0;font-weight: 600;">{{object.applicant.batch.name}}</p>
+									</div>
+									
+									<div style="margin-bottom: 8px;text-align: left;">
+										<p style="font-size: 9px;margin: 0 0 2px 0;font-weight: 400;color: #666;">NAME</p>
+										<p style="font-size: 9px;margin: 0;font-weight: 600;text-transform: uppercase;word-wrap: break-word;">
+											{% if object.applicant.first_name %}{{object.applicant.first_name}}{% endif %} {% if object.applicant.last_name %}{{object.applicant.last_name}}{% endif %}
+										</p>
+									</div>
+									
+									<div style="margin-bottom: 8px;text-align: left;">
+										<p style="font-size: 9px;margin: 0 0 2px 0;font-weight: 400;color: #666;">PASSPORT</p>
+										<p style="font-size: 9px;margin: 0;font-weight: 600;">{{object.applicant.passport_number}}</p>
+									</div>
+									
+									<div style="margin-bottom: 8px;text-align: left;">
+										<p style="font-size: 9px;margin: 0 0 2px 0;font-weight: 400;color: #666;">MODE</p>
+										<p style="font-size: 9px;margin: 0;font-weight: 600;">{{object.mode}}</p>
+									</div>
+								</div>
+								
+								<!-- Amount -->
+								<div style="background: #f0f0f0;padding: 8px;border: 1px solid #000;margin-bottom: 8px;">
+									<p style="font-size: 9px;margin: 0 0 4px 0;font-weight: 400;">AMOUNT</p>
+									<p style="font-size: 14px;margin: 0;font-weight: 700;">
+										&#8377; {{object.amount}}
+									</p>
+								</div>
+							</div>
+						</div>
+					</td>
+
+					<td style="width: 75%;padding:20px 40px 20px 30px;border-left:1px dashed #000;border-bottom:1px dashed #000">
+						<div style="text-align: center; padding-bottom: 15px; border-bottom: 2px solid #000;">
+							<h1 style="padding: 0; margin: 0;">KERALA NADVATHUL MUJAHIDEEN (KHUS)</h1>
+							<p style="padding: 0; margin: 0;">MUJAHID CENTRE, CD TOWER, CALICUT - 673 004</p>
+							<p style="padding: 0; margin: 0;">Ph: 0495 2722801, Fax: 2724262, Email: knmumra@gmail.com</p>
+						</div>
+
+						<div >
+							<table style="width:100%;margin-top:10px">
+								<tr>
+									<td style="text-align:left">No: {{object.reciept_number}}</td>
+									<td style="text-align:center">Batch: {{object.applicant.batch.name}}</td>
+									<td style="text-align:right">Date: {{object.date}}</td>
+								</tr>
+							</table>
+
+						</div>
+
+						<div style="line-height: 2;margin-top:40px;font-style:italic;">
+							<p style="margin-bottom:0">
+								Recieved with thanks from janab ...............
+								<strong>
+									{% if object.applicant.first_name %}{{object.applicant.first_name}}{% endif %} {% if object.applicant.last_name %}{{object.applicant.last_name}}{% endif %}
+								</strong> ............... a sum of Rupees ...............
+								<strong>{{amount}}</strong> ............... as ...............
+								<strong>{{object.mode}}</strong> ............... payment being Hajj Umra Pilgrimage.
+							</p>
+							<p style="margin-bottom:0;">
+								<span style="margin-right: 20px;">Passport Number: <strong>{{object.applicant.passport_number}}</strong></span>
+								{% if object.notes %}
+								<span>Narration: <strong>{{object.notes}}</strong></span>
+								{% endif %}
+							</p>
+						</div>
+
+						<div>
+							<table style="width:100%;margin-top:0">
+								<tr>
+									<td style="text-align:left">
+										<div style="border: 2px solid #000; padding-right: 20px; min-width: 100px; font-weight: bold;font-size:20px;">
+											<span style="color: #fff; background: #000; padding: 15px; display: inline-block; margin-right: 10px;">&#8377;</span> {{object.amount}}
+										</div>
+									</td>
+									<td style="text-align:right">Secretary / Convenor</td>
+								</tr>
+							</table>
+							
+						</div>
+
+					
+						<div style="text-align: center;">
+							<small>This is a computer generated invoice and does not need a signature</small>
+						</div>
+
+					</td>
+				</tr>
+				
+						
+							
+			</table>
+			
+
+		</div>
+	</keepinframe>
+</body>
+
+</html>

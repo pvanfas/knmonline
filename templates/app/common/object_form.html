@@ -1,0 +1,43 @@
+{% extends 'app/base.html' %}
+{% load static i18n crispy_forms_tags %}
+{% block title %}{{title}}: {{app_settings.site_title}}{% endblock %}
+
+{% block javascript %}
+{{form.media}}
+{% endblock javascript %}
+
+{% block content %}
+
+<div class="side-app main-container edit_page">
+
+    <div class="row mt-5">
+        <div class="col-lg-6 col-xl-6 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-header border-bottom-0">
+                    <h5 class="mb-0">{{title}}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <form class="form-horizontal" method="post" autocomplete="off" enctype="multipart/form-data"
+                                action="" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{form|crispy}}
+                                <div class="form-group pt-4 mb-0">
+                                    <button type="submit" class="btn btn-primary me-2">
+                                        {% translate "Save" %}</button>
+                                    <button type="button" onclick="history.back()"
+                                        class="border btn btn-outline-info">{% translate "Cancel" %}</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	{% load static %}
+	<meta charset="utf-8" />
+	<title>ID Card</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+	<style type="text/css">
+		@page {
+			size: a3 portrait;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			font-family: 'Open Sans', sans-serif;
+			padding: 0;
+			margin: 0;
+		}
+
+		p {
+			padding: 0;
+			margin: 0;
+		}
+
+		#main_content {
+			display: -webkit-flex;
+			display: -ms-flex;
+			display: flex;
+			flex-wrap: wrap;
+			max-height: 4677px;
+		}
+
+		.card {
+			background-image: url("{% static 'umrah/images/tags.png'%}");
+		}
+
+		.card {
+			background-repeat: no-repeat;
+			border: 1px dotted #fff;
+			width: 1101px;
+			height: 2205px;
+			position: relative;
+		}
+
+		.info {
+			padding: 555px 100px 0 400px;
+			font-size: 26px;
+			text-transform: uppercase;
+			line-height: 1.6;
+		}
+
+		.name {
+			font-weight: bold;
+			margin: 0;
+			width: 70%;
+		}
+
+		.photo {
+			position: absolute;
+			border-radius: 10px;
+			top: 555px;
+			left: 135px;
+			width: 240px;
+			height: 360px;
+		}
+
+		.address {
+			margin: 0;
+		}
+
+		.passport {
+			margin: 0;
+			font-weight: bold;
+		}
+
+		.residence {
+			font-size: 34px;
+			position: absolute;
+			top: 42em;
+			left: 60px;
+			color: #fff;
+			font-weight: bold;
+		}
+
+		.code {
+			font-size: 40px;
+			position: absolute;
+			top: 23.5em;
+			left: 3.5em;
+			color: #fff;
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body>
+	<keepinframe>
+		<div id="main_content">
+			{% for object in queryset %}
+			<div class="card">
+				<img src="{{object.photo.url}}" alt="" class="photo">
+
+				<div class="info">
+					<p class="name">
+						{% if object.first_name %}{{object.first_name}}{% endif %}
+						{% if object.last_name %}{{object.last_name}}{% endif %}
+					</p>
+					<p class="address">{{object.address|linebreaks}}</p>
+					<p class="passport">{{object.passport_number}}</p>
+				</div>
+
+				<div class="code">
+					<p>{{object.batch.code}}/{{object.sl_no}}</p>
+				</div>
+
+			</div>
+			{% endfor %}
+		</div>
+	</keepinframe>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+  <title>{% block title %}{{app_settings.site_title}}{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'app/plugins/bootstrap/css/bootstrap.css' %}?v=2.0" />
+  <link rel="stylesheet" href="{% static 'app/css/style.min.css' %}?v=2.0" />
+  <link rel="stylesheet" href="{% static 'app/css/custom.css' %}?v=2.0" />
+  {% block extra_css %}{% endblock %}
+
+</head>
+
+<body class="app sidebar-mini ltr">
+  <div class="page">
+    <div class="page-main">
+      <div class="app-content main-content m-0">
+        {% block content %}
+
+        {% endblock %}
+      </div>
+    </div>
+</body>
+
+</html>

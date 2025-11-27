@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	{% load static %}
+	<meta charset="utf-8" />
+	<title>ID Card</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+	<style type="text/css">
+		@page {
+			size: a4 portrait;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			font-family: 'Ubuntu', sans-serif;
+			padding: 0;
+			margin: 0;
+		}
+
+		p {
+			padding: 0;
+			margin: 0;
+		}
+		#main_content {
+			background-image: url("{% static 'umrah/images/card_blue.jpg'%}");
+			{% if object.batch.color == "RED" %}
+			background-image: url("{% static 'umrah/images/card_red.jpg'%}");
+			{% endif %}
+			{% if object.batch.color == "BLUE" %}
+			background-image: url("{% static 'umrah/images/card_blue.jpg'%}");
+			{% endif %}
+			{% if object.batch.color == "GREEN" %}
+			background-image: url("{% static 'umrah/images/card_green.jpg'%}");
+			{% endif %}
+			{% if batch.color == "PINK" %}
+			background-image: url("{% static 'umrah/images/card_pink.jpg'%}");
+			{% endif %}
+			{% if batch.color == "YELLOW" %}
+			background-image: url("{% static 'umrah/images/card_yellow.jpg'%}");
+			{% endif %}
+		}
+		#main_content {
+			width: 929px;
+			height: 1316px;
+		}
+
+		.info {
+            position: absolute;
+            top: 450px;
+            left: 345px;
+            font-size: 33px;
+            text-transform: uppercase;
+            line-height: 1.6;
+        }
+
+        .name {
+            font-weight: bold;
+        }
+
+        .photo {
+            position: absolute;
+            border-radius: 10px;
+            top: 450px;
+            left: 50px;
+            width: 241px;
+            height: 312px;
+            object-fit: cover;
+            border: 2px solid #262525;
+        }
+
+        .passport {
+            font-weight: bold;
+        }
+
+        .residence {
+            font-size: 24px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            color: #ffffff;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .code {
+            font-size: 50px;
+            position: absolute;
+            top: 16em;
+            left: 1.8em;
+            color: #000000;
+            font-weight: bold;
+        }
+	</style>
+</head>
+
+<body>
+	<keepinframe>
+		<div id="main_content">
+			<img src="{{object.photo.url}}" alt="" class="photo">
+
+			<div class="info">
+				<p class="name">{% if object.first_name %}{{object.first_name}}{% endif %}  {% if object.last_name %}{{object.last_name}}{% endif %}</p>
+				<p class="address">{{object.address|linebreaks}}</p>
+				{% if object.mobile %}<p class="address">Phone: {{object.mobile}}</p>{% endif %}
+				<p class="passport">{{object.passport_number}}</p>
+			</div>
+
+			<div class="code">
+				<p>{{object.batch.code}}/{{object.sl_no}}</p>
+			</div>
+
+			<div class="residence">
+				<div style="padding: 19px 52px 30px 52px;">
+					<p style="margin: 0;">
+						{{object.batch.residence|linebreaks}}
+					</p>
+				</div>
+			</div>
+
+		</div>
+	</keepinframe>
+</body>
+
+</html>

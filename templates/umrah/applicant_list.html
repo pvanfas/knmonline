@@ -1,0 +1,62 @@
+{% extends 'app/base.html' %}
+{% load static i18n crispy_forms_tags django_tables2 %}
+{% block title %}{{title|title}} : {{app_settings.site_title}}{% endblock %}
+
+{% block content %}
+
+<div class="side-app main-container">
+
+  <!--Page header-->
+  <div class="page-header d-flex">
+    <div class="page-leftheader">
+      <div class="page-title">{{title|title}}</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+      <div class="btn-list">
+
+        {% if can_add and create_url %}
+        <a href="{{create_url}}" class="btn btn-sm btn-white" data-bs-placement="top" data-bs-toggle="tooltip"
+          title="New"> <i class="feather feather-plus"></i> </a>
+        {% endif %}
+
+        <a class="btn btn-sm btn-white" data-bs-toggle="offcanvas" href="#offcanvasFilter" role="button"
+          aria-controls="offcanvasFilter" title="Filter Data"> <i class="feather feather-filter"></i> </a>
+
+        {% if table.paginated_rows %}
+        <a href="{% export_url 'xlsx' %}" class="btn btn-sm btn-white" data-bs-placement="top" data-bs-toggle="tooltip"
+          title="Export"> <i class="feather feather-download-cloud"></i> </a>
+        {% endif %}
+
+        <a class="btn btn-white" href="{% url 'umrah:all_applicant_list' %}" style="height:32.4px;line-height:20px;">View All</a>
+      </div>
+    </div>
+  </div>
+  
+
+  <!--End Page header-->
+  <div class="row row-sm">
+    <div class="col-lg-12">
+
+      <div class="card">
+        {% if table.paginated_rows %}
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            {% render_table table %}
+          </div>
+        </div>
+        {% else %}
+        <div class="card-body">
+          {{title|title}} {% translate "list is empty." %}
+          {% if can_add %}<a href="{{create_url}}">{% translate "Add New One" %}</a>{% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% include 'app/partials/filter.html' %}
+{% include 'app/partials/help.html' %}
+
+{% endblock content %}

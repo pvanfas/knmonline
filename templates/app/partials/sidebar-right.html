@@ -1,0 +1,26 @@
+{% load static humanize %}
+<div class="sidebar sidebar-right sidebar-animate" id="notificationSidebar">
+    <div class="p-relative">
+        <div class="card-header border-bottom">
+            <h4 class="card-title"><a href="#">Notifications</a> </h4>
+            <div class="card-options">
+                <a href="javascript:void(0);" class="btn btn-sm btn-icon btn-light  text-primary" style="background: #fff;border-radius: 50%;"
+                    data-bs-toggle="sidebar-right" data-bs-target=".sidebar-right"><i class="feather feather-x"></i>
+                </a>
+            </div>
+        </div>
+        <div class="">
+            {% for notification in notifications %}
+            <div class="list-group-item notification_message {% if not notification.is_read %}active{% endif %}">
+                <a class="mt-1" href="#">
+                    <h6 class="font-weight-semibold fs-16">{{notification.title}} </h6>
+                    <small class="text-muted fs-13 ms-auto"><i
+                            class="mdi mdi-clock text-muted me-1"></i>{{notification.created | naturaltime }}</small>
+                    <p>{{notification.description}}</p>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>

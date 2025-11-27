@@ -1,0 +1,60 @@
+{% if metadata.expand == 'newpage' %}
+<a class="btn btn-sm btn-light btn-outline-info" href="{{record.get_absolute_url}}">OPEN</a>
+{% else %}
+<button class="btn btn-sm btn-light btn-outline-info" type="button" data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvas_{{record.pk}}" aria-controls="offcanvas_{{record.pk}}">Preview</button>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas_{{record.pk}}"
+    aria-labelledby="offcanvas_{{record.pk}}Label">
+
+    <div class="offcanvas-header">
+        <h5 id="offcanvas_{{record.pk}}Label" class="mb-0">{{record}}</h5>
+        <button type="button" class="btn btn-close btn-sm text-primary text-reset" style="background: #fff;" data-bs-dismiss="offcanvas" aria-label="Close"><i class="feather feather-x"></i></button>
+    </div>
+
+    <div class="offcanvas-body">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" style="width:100%;">
+                    <tbody>
+                        {% for name, value in record.get_fields|slice:"5:" %}
+                        {% if value %}
+                        <tr>
+                            <td class="fw-light"> {{name}} </td>
+                            <td> {{ value }} </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas-footer px-4 py-3">
+        <div class="d-flex justify-content-end">
+            {% if record.get_absolute_url %}
+            <a href="{{ record.get_absolute_url }}" class="action-btns1" data-bs-toggle="tooltip"
+                data-bs-placement="top" aria-label="View {{record}}" data-bs-original-title="View {{record}}">
+                <i class="fe fe-maximize-2 text-primary"></i>
+            </a>
+            {% endif %}
+
+            {% if record.get_update_url %}
+            <a href="{{ record.get_update_url }}?next={{request.get_full_path}}" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top"
+                aria-label="Edit {{record}}" data-bs-original-title="Edit {{record}}">
+                <i class="fe fe-edit-2  text-success"></i>
+            </a>
+            {% endif %}
+
+            {% if record.get_delete_url %}
+            <a href="{{ record.get_delete_url }}" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top"
+                aria-label="Delete {{record}}" data-bs-original-title="Delete {{record}}">
+                <i class="fe fe-trash-2 text-danger"></i>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endif %}

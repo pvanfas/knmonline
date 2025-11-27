@@ -1,0 +1,28 @@
+{% load i18n crispy_forms_tags %}
+
+<div class="offcanvas offcanvas-end" id="offcanvasFilter" aria-labelledby="offcanvasFilterLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasFilterLabel">Filter Data</h5>
+        <button type="button" class="btn btn-close btn-sm text-primary text-reset" style="background: #fff;" data-bs-dismiss="offcanvas" aria-label="Close"><i class="feather feather-x"></i></button>
+    </div>
+    <div class="offcanvas-body">
+        <form action="" method="get">
+            <div class="modal-body">
+                <div class="row">
+                    {% for field in filter.form %}
+                    <div class="col-12">
+                        <div class="form-group">
+                            {{ field.errors }}
+                            {{ field|as_crispy_field }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="reset" class="btn btn-white me-auto border">{% translate "Reset" %}</button>
+                <button type="submit" class="btn btn-primary">{% translate "Apply" %}</button>
+            </div>
+        </form>
+    </div>
+</div>

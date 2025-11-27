@@ -1,0 +1,17 @@
+[tool.black]
+target-version = ['py310']
+line-length = 180
+
+[tool.isort]
+py_version = 310
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+line_length = 180
+
+[tool.ruff]
+line-length = 180
+
+[tool.ruff.lint.mccabe]
+max-complexity = 24
+
+[tool.ruff.lint.pycodestyle]
+ignore-overlong-task-comments = true

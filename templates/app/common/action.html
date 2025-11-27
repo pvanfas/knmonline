@@ -1,0 +1,45 @@
+{% extends 'app/base.html' %}
+{% load static i18n crispy_forms_tags django_tables2 %}
+{% block title %}You landed on a desert : {{app_settings.site_title}}{% endblock %}
+
+{% block content %}
+
+<div class="side-app main-container">
+
+    <!--Page header-->
+    <div class="page-header d-flex">
+        <div class="page-leftheader">
+            <div class="page-title">You landed on a desert</div>
+        </div>
+    </div>
+
+    <div class="row row-sm">
+        <div class="col-lg-12">
+            <div class="card">
+
+                <div class="card-body text-center">
+                    <div class="card-image text-center mb-4">
+                        <img src="{% static 'app/images/error/404.png' %}" alt="" class="w-100" style="max-width: 400px;">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mx-auto">
+                            <p>
+                                "Welcome to the desert of lost pages! It looks like you've stumbled upon a 404 error, which
+                                means the page you were trying to find has vanished into the sands of the internet. Don't worry
+                                though, there's plenty of sand to go around! In fact, there's so much sand that there's not much
+                                else here. But hey, at least you won't have to worry about being bothered by any annoying
+                                notifications or pop-ups. Just sit back, relax, and enjoy the silence of the 404 desert. Who
+                                knows, you might even find a treasure chest full of 404 error messages buried somewhere in the
+                                sand. Happy searching!"
+                            </p>
+                            <a href="/" class="btn btn-primary">{% trans "Go Home, It is getting late" %}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends 'app/base.html' %}
+{% load static i18n crispy_forms_tags %}
+{% block title %}Bad Request Error!: {{app_settings.site_title}}{% endblock %}
+
+{% block content %}
+
+<div class="side-app main-container detail_page">
+
+	<div class="page-header d-flex">
+		<div class="page-leftheader">
+			<div class="page-title">Bad Request Error!</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card content_card">
+				<div class="card-body">
+
+					<div class="row">
+						<div class="col-md-5">
+							<img src="{% static 'app/images/png/error.png' %}" alt=" " class="mt-7">
+						</div>
+						<div class="col-md-7 mt-6">
+							<div class="display-1 mb-5 font-weight-semibold texteffect">401</div>
+							<h1 class="h3  mb-3 font-weight-semibold">Oh !!</h1>
+							<p class="h5 font-weight-normal mb-7 leading-normal text-muted">{{message}}</p>
+							<a class="btn btn-primary" href="{% url 'auth_logout' %}">Logout</a>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

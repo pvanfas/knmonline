@@ -1,0 +1,10 @@
+{% extends 'registration/registration_base.html' %}
+{% load static crispy_forms_tags %}
+{% block title %}Logged Out{% endblock %}
+
+{% block content %}
+<div class="p-4 pt-6 text-center">
+    <h1 class="mb-5 h3 font-weight-bold">Logged out.</h1>
+    <a href="{% url 'auth_login' %}" class="btn btn-outline-info">Login Again</a>
+</div>
+{% endblock content %}

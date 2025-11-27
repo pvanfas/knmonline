@@ -1,0 +1,42 @@
+{% extends 'app/base.html' %}
+{% load static i18n crispy_forms_tags %}
+{% block title %}"{% translate "Delete" %} "{{object}}" : {{app_settings.site_title}}{% endblock %}
+
+{% block content %}
+
+<div class="side-app main-container">
+
+    <!--Page header-->
+    <div class="page-header d-flex">
+        <div class="page-leftheader">
+            <div class="page-title">{% translate "Delete" %} "{{object|truncatechars:"60"}}"</div>
+        </div>
+    </div>
+    <!--End Page header-->
+
+    <!-- Row-->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">{% csrf_token %}
+                        <p>
+                            <strong>{% translate "Are you sure you want to delete" %}</strong>
+                            "{{ object }}"?
+                        </p>
+                        <div class="buttons mt-5">
+                            <button type="submit" class="btn btn-danger me-2">{% translate "Yes, Delete." %}</button>
+                            <button type="button" onclick="history.back()" class="border btn btn-outline-info">
+                                {% translate "No, Take me back" %}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Row-->
+</div>
+
+{% include 'app/partials/help.html' %}
+
+{% endblock content %}

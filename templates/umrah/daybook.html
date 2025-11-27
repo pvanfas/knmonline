@@ -1,0 +1,203 @@
+{% extends 'app/base.html' %}
+{% load i18n indian_humanize %}
+
+{% block title %}{{ title|title }} : {{ app_settings.site_title }}{% endblock %}
+
+{% block content %}
+
+<div class="side-app main-container">
+
+  <div class="page-header d-flex flex-wrap gap-2 align-items-center">
+    <div class="page-leftheader">
+      <div class="page-title">{{ title|title }}</div>
+    </div>
+  </div>
+
+  <div class="row row-sm mb-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted text-uppercase fs-12">{% translate "Opening Balance" %}</span>
+            <span class="badge bg-success-transparent text-success text-uppercase">{% translate "Cash" %}</span>
+          </div>
+          <div class="fs-28 fw-semibold mt-2">{{ opening_balance|indian_currency }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted text-uppercase fs-12">{% translate "Closing Balance" %}</span>
+            <span class="badge bg-primary-transparent text-primary text-uppercase">{% translate "Cash" %}</span>
+          </div>
+          <div class="fs-28 fw-semibold mt-2">{{ closing_balance|indian_currency }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row-sm">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header py-3">
+          <form method="get" class="row g-2 align-items-end">
+            <div class="col-md-3">
+              <label for="id_start_date" class="form-label">{% translate "Start date" %}</label>
+              <input type="date" class="form-control" id="id_start_date" name="start_date"
+                value="{{ filters.start_date|date:'Y-m-d' }}">
+            </div>
+            <div class="col-md-3">
+              <label for="id_end_date" class="form-label">{% translate "End date" %}</label>
+              <input type="date" class="form-control" id="id_end_date" name="end_date"
+                value="{{ filters.end_date|date:'Y-m-d' }}">
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+              <button type="submit" class="btn btn-primary w-100">{% translate "Apply" %}</button>
+              <a href="{% url 'umrah:cash_daybook' %}" class="btn btn-light w-100">{% translate "Reset" %}</a>
+            </div>
+          </form>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">{% translate "Date" %}</th>
+                  <th scope="col">{% translate "Receipt/Voucher" %}</th>
+                  <th scope="col">{% translate "Receipt/Voucher No" %}</th>
+                  <th scope="col">{% translate "Batch" %}</th>
+                  <th scope="col">{% translate "Head of Account" %}</th>
+                  <th scope="col" class="text-end">{% translate "Cr Amount" %}</th>
+                  <th scope="col" class="text-end">{% translate "Dr Amount" %}</th>
+                  <th scope="col" class="text-end">{% translate "Balance" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if entries %}
+                {% for entry in entries %}
+                <tr>
+                  <td>{{ entry.date|date:"Y-m-d" }}</td>
+                  <td>{{ entry.label }}</td>
+                  <td>{{ entry.number }}</td>
+                  <td>{{ entry.batch }}</td>
+                  <td>
+                    {{ entry.head }}
+                    {% if entry.notes %}
+                    <div class="text-muted small">{{ entry.notes }}</div>
+                    {% endif %}
+                  </td>
+                  <td class="text-end">{{ entry.credit|indian_currency }}</td>
+                  <td class="text-end">{{ entry.debit|indian_currency }}</td>
+                  <td class="text-end fw-semibold">{{ entry.balance|indian_currency }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td colspan="8" class="text-center text-muted py-4">
+                    {% translate "No cash transactions found for the selected period." %}
+                  </td>
+                </tr>
+                {% endif %}
+              </tbody>
+              <tfoot class="table-light">
+                <tr class="fw-semibold">
+                  <td colspan="5" class="text-end">{% translate "Totals" %}</td>
+                  <td class="text-end">{{ total_credit|indian_currency }}</td>
+                  <td class="text-end">{{ total_debit|indian_currency }}</td>
+                  <td class="text-end">{{ closing_balance|indian_currency }}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row-sm mt-3">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header py-3">
+          <h6 class="mb-0">{% translate "Daily summary" %}</h6>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">{% translate "Date" %}</th>
+                  <th scope="col" class="text-end">{% translate "Total Credit" %}</th>
+                  <th scope="col" class="text-end">{% translate "Total Debit" %}</th>
+                  <th scope="col" class="text-end">{% translate "Closing Balance" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if daily_summary %}
+                {% for summary in daily_summary %}
+                <tr>
+                  <td>{{ summary.date|date:"Y-m-d" }}</td>
+                  <td class="text-end">{{ summary.credit|indian_currency }}</td>
+                  <td class="text-end">{{ summary.debit|indian_currency }}</td>
+                  <td class="text-end">{{ summary.closing|indian_currency }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td colspan="4" class="text-center text-muted py-3">
+                    {% translate "No daily totals available." %}
+                  </td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header py-3">
+          <h6 class="mb-0">{% translate "Monthly summary" %}</h6>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">{% translate "Month" %}</th>
+                  <th scope="col" class="text-end">{% translate "Total Credit" %}</th>
+                  <th scope="col" class="text-end">{% translate "Total Debit" %}</th>
+                  <th scope="col" class="text-end">{% translate "Closing Balance" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if monthly_summary %}
+                {% for summary in monthly_summary %}
+                <tr>
+                  <td>{{ summary.label }}</td>
+                  <td class="text-end">{{ summary.credit|indian_currency }}</td>
+                  <td class="text-end">{{ summary.debit|indian_currency }}</td>
+                  <td class="text-end">{{ summary.closing|indian_currency }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td colspan="4" class="text-center text-muted py-3">
+                    {% translate "No monthly totals available." %}
+                  </td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock content %}
+

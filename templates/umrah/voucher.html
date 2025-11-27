@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>VOUCHER</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+	<style type="text/css">
+		@page {
+			size: a4 portrait;
+			margin: 0;
+			padding: 0;
+
+			@frame footer {
+				-pdf-frame-content: footer_content;
+				bottom: 0in;
+				margin-left: 15pt;
+				margin-right: 15pt;
+				height: 1cm;
+			}
+		}
+
+		body {
+			font-family: 'Open Sans', sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+
+		* {
+			padding: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<keepinframe>
+		<div style="height:33.33%;margin-bottom:0;">
+
+			<table style="width:100%;">
+				<tr>
+					<td style="width: 100%;padding:20px 40px 20px 30px;border-bottom:1px dashed #000">
+						<div style="text-align: center; padding-bottom: 15px; border-bottom: 2px solid #000;">
+							<h1 style="padding: 0; margin: 0;">KERALA NADVATHUL MUJAHIDEEN (KHUS)</h1>
+							<p style="padding: 0; margin: 0;">MUJAHID CENTRE, CD TOWER, CALICUT - 673 004</p>
+							<p style="padding: 0; margin: 0;">Ph: 0495 2722801, Fax: 2724262, Email: knmumra@gmail.com
+							</p>
+						</div>
+
+						<div>
+							<table style="width:100%;margin-top:10px">
+								<tr>
+									<td style="text-align:left">Voucher No: {{object.voucher_number}}</td>
+									<td style="text-align:center">Batch: {{object.batch.name}}</td>
+									<td style="text-align:right">Date: {{object.date}}</td>
+								</tr>
+								<tr>
+									<td style="text-align:left;padding-top: 10px;padding-bottom: 20px;" colspan="3">
+										Head of Account: <strong>{{object.purpose.name}}</strong>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3">
+										<p style="margin-bottom:25px">
+											Recieved from the Treasurer / Cashier Rupees ........
+											<strong>{{amount}}</strong> ........ as <strong>{{object.mode}}</strong>
+											Payment for the purpose given above.
+										</p>
+									</td>
+								</tr>
+								<tr>
+									<td style="text-align:left">
+										<div
+											style="border: 2px solid #000; padding-right: 20px; min-width: 100px; font-weight: bold;font-size:20px;margin-right: 10px;">
+											<span
+												style="color: #fff; background: #000; padding: 15px; display: inline-block; margin-right: 10px;">&#8377;</span>
+											{{object.amount}}
+										</div>
+									</td>
+									<td colspan="2"></td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<div style="margin-top: 10px;">Notes: {{object.notes}}</div>
+									</td>
+								</tr>
+
+							</table>
+
+						</div>
+
+						<div style="line-height: 2;margin-top:20px;font-style:italic;">
+
+						</div>
+
+						<div>
+							<table style="width:100%;margin-top:0">
+								<tr>
+									<td style="vertical-align:top;text-align:left;width:30%">Paid By:</td>
+									<td style="vertical-align:top;text-align:left;width:30%">Passed By:</td>
+									<td style="vertical-align:top;text-align:left;width:40%">
+										Signature:
+										<p>Fullname & Address: </p>
+									</td>
+								</tr>
+
+							</table>
+
+						</div>
+
+					</td>
+				</tr>
+
+			</table>
+
+		</div>
+	</keepinframe>
+</body>
+
+</html>

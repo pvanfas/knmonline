@@ -1,0 +1,50 @@
+{% load static i18n %}
+
+<div class="modal fade" id="myModal">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content tx-size-sm">
+			<div class="modal-body text-center">
+				<i class="fe fe-alert-triangle fs-50"></i>
+				<h4 class="text-primary fs-20 font-weight-semibold mt-2">Session Timeout</h4>
+				<progress id="custom-bar" class="custom-progress mb-4 wd-70p mt-3" max="100" value="0">0%</progress>
+				<p class="mb-4 mx-4">You're being timed out due to inactivity. Please choose to stay signed in or to
+					logoff. Otherwise, you will logged off automatically..</p>
+				<a class="btn btn-danger px-5" href="/>">Log Out</a>
+				<a aria-label="Close" class="btn btn-primary px-5 text-white" data-bs-dismiss="modal">Stay Logged in</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% block javascript %}
+<script>
+	// after 10 minutes of inactivity, the user will be alerted that they are about to be logged out
+	var idleTime = 0;
+	$(document).ready(function () {
+		var idleInterval = setInterval(timerIncrement, 600); // 1 minute
+		$(this).mousemove(function (e) {idleTime = 0;});
+		$(this).keypress(function (e) {idleTime = 0;});
+	});
+
+	function timerIncrement() {
+		idleTime = idleTime + 1;
+		console.log("User was idle for " + idleTime + " seconds");
+		if (idleTime > 10) { // 10 minutes
+			$('#myModal').modal('show');
+
+			setInterval(function () {
+				var progress = document.getElementById('custom-bar');
+				if (progress.value < progress.max) {
+					progress.value += 2;
+				}
+			}, 3000);
+
+			// if the user chooses to stay logged in, the timer will reset
+			$('#myModal').on('hidden.bs.modal', function () {
+				idleTime = 0;
+			})
+		}
+	}
+
+</script>
+{% endblock %}
